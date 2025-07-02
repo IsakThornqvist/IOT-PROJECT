@@ -6,7 +6,7 @@
 
 This project demonstrates how to build an IoT temperature and humidity sensor using a DHT11 sensor and a Raspberry Pi Pico W. The device reads environmental data and transmits it to Adafruit IO using the MQTT protocol.
 
-- **Estimated Time**: ??? 
+- **Estimated Time**: 20h
 - **Skill Level**: Beginner to Intermediate
 
 ---
@@ -25,15 +25,17 @@ I chose to build this sensor because indoor climate monitoring is valuable for c
 
 | Component            | Purpose                          | Source         | Cost     |
 |---------------------|----------------------------------|----------------|----------|
-| Raspberry Pi Pico W | Microcontroller with WiFi        | ???  | ???    |
-| DHT11 Sensor         | Measures temperature & humidity  | ???  | ???    |
-| Wires         | For connections                  | ???  | ???       |
-| Breadboard           | Prototyping connections          | ???  | ???       |
-| Micro USB Cable      | Power and programming            | ???  | ???    |
-
-> 📸 *Photos*
+| Raspberry Pi Pico W | Microcontroller with WiFi        | [Elektrokit](https://www.electrokit.com/lnu-starter)  | ???    |
+| DHT11 Sensor         | Measures temperature & humidity  | [Elektrokit](https://www.electrokit.com/lnu-starter)  | ???    |
+| Wires         | For connections                  | [Elektrokit](https://www.electrokit.com/lnu-starter)  | ???    |
+| Breadboard           | Prototyping connections          | [Elektrokit](https://www.electrokit.com/lnu-starter)  | ???    |
+| Micro USB Cable      | Power and programming            | [Elektrokit](https://www.electrokit.com/lnu-starter)  | ???    |
 
 ---
+> ![image](https://github.com/user-attachments/assets/fbb64cc1-1975-4b12-99f3-9d51146eba9f)
+
+> 📸 *The LNU starter kit*
+
 
 ## Computer Setup
 
