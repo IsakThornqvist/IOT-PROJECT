@@ -7,7 +7,7 @@
 This project demonstrates how to build an IoT temperature and humidity sensor using a DHT11 sensor and a Raspberry Pi Pico W. The device reads environmental data and transmits it to Adafruit IO using the MQTT protocol.
 
 - **Estimated Time**: 8h
-- **Skill Level**: Beginner to Intermediate
+- **Skill Level**: Beginner
 
 ---
 
