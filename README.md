@@ -23,13 +23,15 @@ I chose to build this sensor because indoor climate monitoring is valuable for c
 
 ## Materials
 
-| Component            | Purpose                          | Source         | Cost     |
-|---------------------|----------------------------------|----------------|----------|
-| Raspberry Pi Pico W | Microcontroller with WiFi        | [Elektrokit](https://www.electrokit.com/lnu-starter)  | ???    |
-| DHT11 Sensor         | Measures temperature & humidity  | [Elektrokit](https://www.electrokit.com/lnu-starter)  | ???    |
-| Wires         | For connections                  | [Elektrokit](https://www.electrokit.com/lnu-starter)  | ???    |
-| Breadboard           | Prototyping connections          | [Elektrokit](https://www.electrokit.com/lnu-starter)  | ???    |
-| Micro USB Cable      | Power and programming            | [Elektrokit](https://www.electrokit.com/lnu-starter)  | ???    |
+| Component            | Purpose                          | Source         |
+|---------------------|----------------------------------|----------------|
+| Raspberry Pi Pico W | Microcontroller with WiFi        | [Elektrokit](https://www.electrokit.com/lnu-starter)  |
+| DHT11 Sensor         | Measures temperature & humidity  | [Elektrokit](https://www.electrokit.com/lnu-starter)  |
+| Wires         | For connections                  | [Elektrokit](https://www.electrokit.com/lnu-starter)  |
+| Breadboard           | Prototyping connections          | [Elektrokit](https://www.electrokit.com/lnu-starter)  |
+| Micro USB Cable      | Power and programming            | [Elektrokit](https://www.electrokit.com/lnu-starter)  |
+
+>  *The LNU starter kit costs 349 SEK and includes all needed components for this project*
 
 ---
 > ![image](https://github.com/user-attachments/assets/fbb64cc1-1975-4b12-99f3-9d51146eba9f)
@@ -120,14 +122,6 @@ Before you begin, ensure you have the following:
 
 ---
 
-## Computer Setup 
-
-- **Platform**: 
-- **Why Adafruit IO?** Free for basic use, easy integration with MQTT, great dashboards  
-- **Plan**: Free plan
-
----
-
 ## Platform Choice
 
 - **Platform**: Adafruit IO
@@ -156,6 +150,31 @@ import time
 
 
 ## Finalizing the design
+
+The Temperature and Humidity project turned out as expected. Readings from the DHT11 sensor are successfully transmitted every 30 seconds and displayed in real-time on the Adafruit IO dashboard.
+
+## Results
+
+   - Reliable sensor readings at 30 second intervals.
+   - Data transmission over WI-FI using the Raspberry Pi
+   - Live updates that you can view in the Adafruit dashboard  
+
+## Reflection
+
+When I started this project, I had no idea what to expect. All of the components I ordered from Elektrokit were completely new to me, and I had never interacted with them before. The learning curve was steep, especially during the first few weeks of the course.
+
+Although I had prior programming experience in Java and JavaScript, Python was completely new to me. Fortunately, the course had a well-structured format. Each week had a clear focus, and the roadmap provided a helpful overview of what was coming up next. This structure made the process more manageable and allowed me to build up my knowledge step by step both in programming and hardware.
+
+For the project itself, I decided to go with a relatively simple idea—one that still gave me room to learn and that could easily be expanded in the future if desired.
+
+Possible improvements
+   - Use a more advanced sensor, or include additional sensors to measure different environmental variables like light.
+   - The Pico W itself is currently very exposed, if used outdoors it could get damaged so some sort of protection around the build could be of use.
+   - The dashboard itself could be more advanced. For example: show average temperature over a day, add additional visual components (e.g., gauges, indicators) or even allowing to switch between diffrent timeframes for more precise data views
+
+
+> 📷 *Final product*
+
 
 
 
