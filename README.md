@@ -142,6 +142,31 @@ import time
 
 ## Transmitting the data / Connectivity
 
+The DHT11 sensor data (temperature and humidity) is transmitted to the internet using Wi-Fi and sent to Adafruit IO using the MQTT protocol. The main steps involved are:
+
+- Wi-Fi Connection:
+The Raspberry Pi Pico W connects to a local Wi-Fi network using credentials stored in keys.py. This is handled in wifiConnection.py.
+
+- Reading Sensor Data:
+Every 30 seconds, the Pico W reads temperature and humidity data from the DHT11 sensor connected to GPIO 27.
+
+- Preparing the Data:
+The sensor values are converted to strings and published using the MQTT client.
+
+- Sending the Data:
+The data is sent over the Wi-Fi network using the MQTT protocol to Adafruit IO, where it is displayed on a dashboard.
+
+## Communication flow
+DHT11 sensor -> Read data on Pico W -> Convert to String -> MQTT publish() -> Send over Wi-Fi -> MQTT protocoll to Adafruit.io -> Data visible on dashboard
+
+## Package Format
+The transport protocal used was MQTT (Message Queuing Telemetry Transport) which is a lightweight messaging protocol used to publish the sensor data to Adafruit IO.
+
+   The MQTT messages contains:
+   - Topic (e.g., username/feeds/temperature or username/feeds/humidity)
+   - Payload: String of the sensor value (e.g., 25 or 56)
+
+
 ## Presenting the data
 
 ![image](https://github.com/user-attachments/assets/1ff5c080-709e-4589-891e-b71341ef9db4)
