@@ -132,13 +132,73 @@ Before you begin, ensure you have the following:
 
 ## The Code (Core Logic)
 
+The code is devided into several diffrent files for clarity, some of the most important parts are:
+
+1. Wi-Fi Setup (wifiConnection.py)
 ```python
-import time
-....
-...
-...
+def connect():
+    wlan = network.WLAN(network.STA_IF)         # Put modem on Station mode
+    if not wlan.isconnected():                  # Check if already connected
+        print('connecting to network...')
+        wlan.active(True)                       # Activate network interface
+        # set power mode to get WiFi power-saving off (if needed)
+        wlan.config(pm = 0xa11140)
+        wlan.connect(keys.WIFI_SSID, keys.WIFI_PASS)  # Your WiFi Credential
+        print('Waiting for connection...', end='')
+        # Check if it is connected otherwise wait
+        while not wlan.isconnected() and wlan.status() >= 0:
+            print('.', end='')
+            sleep(1)
+    # Print the IP assigned by router
+    ip = wlan.ifconfig()[0]
+    print('\nConnected on {}'.format(ip))
+    return ip
+
 
 ```
+>  *This function manages the Wi-Fi connection. It activates the network interface, connects using saved credentials, and waits until the connection is established. Disabling power saving helps maintain a stable link. Finally, it returns the assigned IP address. This is important for being able to data transmission to Adafruit. IO.*
+
+ 2. Sensor Initialization & Data Handling (main.py)
+```python
+# Initialize the DHT11 sensor on GPIO pin 27
+dhtSensor = dht.DHT11(Pin(27))
+
+# Function to read sensor data and publish to Adafruit IO
+def sendSensorData():
+    global last_sensor_sent_ticks
+    if (time.ticks_ms() - last_sensor_sent_ticks) < SENSOR_INTERVAL:
+        return  # Wait for the next interval
+
+    try:
+        dhtSensor.measure()
+        temperature = dhtSensor.temperature()
+        humidity = dhtSensor.humidity()
+
+        client.publish(keys.AIO_TEMPERATURE_FEED, str(temperature))
+        client.publish(keys.AIO_HUMIDITY_FEED, str(humidity))
+    except Exception as e:
+        print("Sensor error:", e)
+    finally:
+        last_sensor_sent_ticks = time.ticks_ms()
+
+```
+>  *This function is responsible for collecting temperature and humidity data from the DHT11 sensor and publishing it to Adafruit IO via MQTT.*
+
+ 3. MQTT Connection Setup (main.py)
+```python
+from mqtt import MQTTClient
+
+# Create a client and connect to Adafruit IO
+client = MQTTClient(keys.AIO_CLIENT_ID, keys.AIO_SERVER, keys.AIO_PORT, keys.AIO_USER, keys.AIO_KEY)
+
+try:
+    client.connect()
+    print("Connected to Adafruit IO successfully!")
+except Exception as e:
+    print("Failed to connect to Adafruit IO:", e)
+
+```
+>  *This snippet sets up the MQTT client and that then allows the device to communicate with Adafruit. If this connection was not there, sensor data would not be able to be sent to the dashboard.*
 
 ## Transmitting the data / Connectivity
 
@@ -197,8 +257,14 @@ Possible improvements
    - The Pico W itself is currently very exposed, if used outdoors it could get damaged so some sort of protection around the build could be of use.
    - The dashboard itself could be more advanced. For example: show average temperature over a day, add additional visual components (e.g., gauges, indicators) or even allowing to switch between diffrent timeframes for more precise data views
 
+## Final Product
 
-> 📷 *Final product*
+![image](https://github.com/user-attachments/assets/7e71694e-7582-42a0-919b-10029ae7349b)
+
+![image](https://github.com/user-attachments/assets/565587c6-0610-41cf-9977-9236d23e0ea0)
+
+![image](https://github.com/user-attachments/assets/f242c6c8-a05f-468c-a632-b7da0f2bc3d5)
+
 
 
 
