@@ -1,6 +1,6 @@
 #  Temperature & Humidity Sensor with Adafruit IO
 
-**By Isak Thörnqvist (it222hp)**
+**By it222hp**
 
 ## Project Overview
 
