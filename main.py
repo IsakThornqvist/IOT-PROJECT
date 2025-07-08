@@ -1,10 +1,10 @@
-import time                   # Allows use of time.sleep() for delays
-from mqtt import MQTTClient   # For use of MQTT protocol to talk to Adafruit IO
-import machine                # Interfaces with hardware components
-from machine import Pin       # Define pin
-import dht                    # DHT sensor library
-import keys                   # Contain all keys used here
-import wifiConnection         # Contains functions to connect/disconnect from WiFi 
+import time
+from mqtt import MQTTClient # MQTT client for Adafruit IO
+import machine
+from machine import Pin
+import dht # DHT sensor library
+import keys
+import wifiConnection # Custom module for Wi-Fi connection management
 
 # BEGIN SETTINGS
 SENSOR_INTERVAL = 30000     # time between radings (subject to change)
@@ -27,9 +27,7 @@ def sendSensorData():
         dhtSensor.measure()
         temperature = dhtSensor.temperature()  # Temperature in Celsius
         humidity = dhtSensor.humidity()        # Humidity percentage
-        
-        print("Temperature: {}°C, Humidity: {}%".format(temperature, humidity))
-        
+                
         # Publish temperature to Adafruit IO
         print("Publishing temperature: {} to Adafruit IO...".format(temperature), end=' ')
         try:
@@ -47,20 +45,16 @@ def sendSensorData():
             print("FAILED:", e)
             
     except OSError as e:
-        print("Failed to read DHT11 sensor:", e)
-        print("Check sensor wiring and connections")
+        print("DHT11 error", e)
     except Exception as e:
-        print("Unexpected sensor error:", e)
+        print("Sensor error:", e)
     finally:
         last_sensor_sent_ticks = time.ticks_ms()
 
 # Connect to WiFi
 try:
-    print("Connecting to WiFi...")
     ip = wifiConnection.connect()
     print("Connected! IP:", ip)
-except KeyboardInterrupt:
-    print("Keyboard interrupt")
 except Exception as e:
     print("WiFi connection failed:", e)
 
@@ -70,13 +64,11 @@ client = MQTTClient(keys.AIO_CLIENT_ID, keys.AIO_SERVER, keys.AIO_PORT, keys.AIO
 
 try:
     client.connect()
-    print("Connected to Adafruit IO successfully!")
+    print("Connected to Adafruit IO!")
 except Exception as e:
     print("Failed to connect to Adafruit IO:", e)
 
-# Main script loop
 # The loop will run indefinitely, reading the sensor and sending data at specified intervals
-print("Starting sensor monitoring...")
 print("Reading sensor every {} seconds".format(SENSOR_INTERVAL // 1000))
 
 try:
@@ -87,7 +79,7 @@ try:
 except KeyboardInterrupt:
     print("\nProgram interrupted by user")
 except Exception as e:
-    print("Unexpected error in main loop:", e)
+    print("Error in main loop:", e)
 finally:
     # Clean up connections
     try:
