@@ -6,7 +6,7 @@
 
 This project demonstrates how to build an IoT temperature and humidity sensor using a DHT11 sensor and a Raspberry Pi Pico W. The device reads environmental data and transmits it to Adafruit IO using the MQTT protocol.
 
-- **Estimated Time**: 8h
+- **Estimated Time**: 12-18h
 - **Skill Level**: Beginner
 
 ---
@@ -160,22 +160,38 @@ def connect():
 
  2. Sensor Initialization & Data Handling (main.py)
 ```python
-# Initialize the DHT11 sensor on GPIO pin 27
 dhtSensor = dht.DHT11(Pin(27))
 
-# Function to read sensor data and publish to Adafruit IO
+# function to send sensor data to Adafruit IO
 def sendSensorData():
     global last_sensor_sent_ticks
-    if (time.ticks_ms() - last_sensor_sent_ticks) < SENSOR_INTERVAL:
-        return  # Wait for the next interval
-
+    global SENSOR_INTERVAL
+    
+    # time checker
+    if ((time.ticks_ms() - last_sensor_sent_ticks) < SENSOR_INTERVAL):
+        return
+    
     try:
         dhtSensor.measure()
         temperature = dhtSensor.temperature()
         humidity = dhtSensor.humidity()
-
-        client.publish(keys.AIO_TEMPERATURE_FEED, str(temperature))
-        client.publish(keys.AIO_HUMIDITY_FEED, str(humidity))
+                
+        print("Publishing temperature: {} to Adafruit IO...".format(temperature), end=' ')
+        try:
+            client.publish(topic=keys.AIO_TEMPERATURE_FEED, msg=str(temperature))
+            print("SUCCESS")
+        except Exception as e:
+            print("FAILED:", e)
+        
+        print("Publishing humidity: {} to Adafruit IO...".format(humidity), end=' ')
+        try:
+            client.publish(topic=keys.AIO_HUMIDITY_FEED, msg=str(humidity))
+            print("SUCCESS")
+        except Exception as e:
+            print("FAILED:", e)
+            
+    except OSError as e:
+        print("DHT11 error", e)
     except Exception as e:
         print("Sensor error:", e)
     finally:
@@ -186,14 +202,13 @@ def sendSensorData():
 
  3. MQTT Connection Setup (main.py)
 ```python
-from mqtt import MQTTClient
-
-# Create a client and connect to Adafruit IO
+# connect to Adafruit IO using MQTT
+print("Connecting to Adafruit IO...")
 client = MQTTClient(keys.AIO_CLIENT_ID, keys.AIO_SERVER, keys.AIO_PORT, keys.AIO_USER, keys.AIO_KEY)
 
 try:
     client.connect()
-    print("Connected to Adafruit IO successfully!")
+    print("Connected to Adafruit IO!")
 except Exception as e:
     print("Failed to connect to Adafruit IO:", e)
 
