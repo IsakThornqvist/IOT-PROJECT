@@ -7,18 +7,18 @@ import keys
 import wifiConnection
 
 # sensor settings
-SENSOR_INTERVAL = 30000
-last_sensor_sent_ticks = 0
+sensorInterval = 30000
+lastSentTime = 0
 
 dhtSensor = dht.DHT11(Pin(27))
 
 # function to send sensor data to Adafruit IO
 def sendSensorData():
-    global last_sensor_sent_ticks
-    global SENSOR_INTERVAL
+    global lastSentTime
+    global sensorInterval
     
     # time checker
-    if ((time.ticks_ms() - last_sensor_sent_ticks) < SENSOR_INTERVAL):
+    if ((time.ticks_ms() - lastSentTime) < sensorInterval):
         return
     
     try:
@@ -26,14 +26,14 @@ def sendSensorData():
         temperature = dhtSensor.temperature()
         humidity = dhtSensor.humidity()
                 
-        print("Publishing temperature: {} to Adafruit IO...".format(temperature), end=' ')
+        print("Publishing temperature: {} to Adafruit IO.".format(temperature), end=' ')
         try:
             client.publish(topic=keys.AIO_TEMPERATURE_FEED, msg=str(temperature))
             print("SUCCESS")
         except Exception as e:
             print("FAILED:", e)
         
-        print("Publishing humidity: {} to Adafruit IO...".format(humidity), end=' ')
+        print("Publishing humidity: {} to Adafruit IO.".format(humidity), end=' ')
         try:
             client.publish(topic=keys.AIO_HUMIDITY_FEED, msg=str(humidity))
             print("SUCCESS")
@@ -45,7 +45,7 @@ def sendSensorData():
     except Exception as e:
         print("Sensor error:", e)
     finally:
-        last_sensor_sent_ticks = time.ticks_ms()
+        lastSentTime = time.ticks_ms()
 
 # connect to WiFi
 try:
@@ -64,7 +64,7 @@ try:
 except Exception as e:
     print("Failed to connect to Adafruit IO:", e)
 
-print("Reading sensor every {} seconds".format(SENSOR_INTERVAL // 1000))
+print("Reading sensor every {} seconds".format(sensorInterval // 1000))
 
 try:
     while True:
